@@ -19,6 +19,7 @@ public class ConstructionMain : MonoBehaviour {
 	public Vector3 rot_offset;
 	public GameObject ropeend;
 
+	public bool delete_mode;
 	// Use this for initialization
 	void Start () {
 		plane = new Plane(Vector3.forward, Vector3.zero);
@@ -87,6 +88,20 @@ public class ConstructionMain : MonoBehaviour {
 				}
 			}
 		}
+
+		// Item deletion
+		if (current_obj != null && !delete_mode && Input.mousePosition.x < Screen.width * 0.05f){
+			delete_mode = true;
+		}
+		else if (delete_mode && Input.mousePosition.x > Screen.width * 0.3f){
+			delete_mode = false;
+		}
+		else if (delete_mode && Input.GetMouseButtonDown(0)){
+			DestroyPart();
+		}
+		/*else {
+			delete_mode = false;
+		}*/
 	}
 
 	public void PickUpPart (GameObject part){
@@ -126,11 +141,7 @@ public class ConstructionMain : MonoBehaviour {
 
 		current_item.tint = new Color(1, 1, 1, 0.5f);
 	}
-	void OnGUI(){
-		if (current_obj != null && Input.mousePosition.x < Screen.width * 0.2f){
-			GUI.Box(new Rect(-5,-5, Screen.width * 0.2f, Screen.height+10), "");
-		}
-	}
+
 	void SelectPart (GameObject part){
 
 	}

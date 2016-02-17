@@ -16,6 +16,8 @@ public class ConstructionUI : MonoBehaviour {
 	public int cur_cat;
 	public int[] cat_sizes;
 
+	public Animator ani;
+
 	ConstructionMain main;
 	// Use this for initialization
 	void Start () {
@@ -30,11 +32,27 @@ public class ConstructionUI : MonoBehaviour {
 
 		}
 
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (main.current_obj != null){
+			ani.SetBool("Hidden", true);
+		}
+		else{
+			ani.SetBool("Hidden", false);
+		}
+
+	}
+
+	void OnGUI(){
+		if (main.delete_mode){
+			GUI.Box(new Rect(-5,-5, Screen.width * 0.3f, Screen.height+10), "Drop to delete");
+		}
+		else if (!main.delete_mode && main.current_obj != null) {
+			GUI.Box(new Rect(-5,-5, Screen.width * 0.05f, Screen.height+10), "d \ne \nl \ne \nt \ne ");
+		}
 	}
 
 	public void ChangeIcons(int category){

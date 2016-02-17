@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour {
 			cam = Camera.main.gameObject.GetComponent<CameraController>();
 		
 		}
+
 		constr = cam.gameObject.GetComponent<ConstructionMain>();
 		if (constr != null){
 			const_mode = true;
