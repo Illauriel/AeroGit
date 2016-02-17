@@ -80,13 +80,7 @@ public class ConstructionMain : MonoBehaviour {
 		}
 		else {
 			if (Input.GetMouseButtonDown(0)){
-			/*if (Physics.Raycast(ray, out hit)){
-				if (hit.transform.gameObject != grid){
-					Debug.Log("Found Object: "+ hit.transform.gameObject.name + "Captn!");
-					current_obj = hit.transform.gameObject;
-					current_obj.GetComponent<Collider>().enabled = false;
-				}
-			}*/
+			
 				RaycastHit hit = new RaycastHit();
 				if (ProbeUranus(out hit)){
 					PickUpPart(hit.transform.gameObject);
@@ -98,8 +92,7 @@ public class ConstructionMain : MonoBehaviour {
 	public void PickUpPart (GameObject part){
 		//Debug.Log("Found Object: "+ hit.transform.gameObject.name + "Captn!");
 		current_obj = part;
-		//currentCollider = current_obj.GetComponent<Collider>();
-		//currentCollider.enabled = false;
+
 		//Find root;
 		if (current_obj.transform.parent != null){
 			for (int i = 0; i < 10; i++) { //You won't make an item 10 children deep?
@@ -129,23 +122,7 @@ public class ConstructionMain : MonoBehaviour {
 		else {
 			Debug.LogError("The collider array you refer to is empty!");
 		}
-		//FixedJoint fj = current_obj.GetComponent<FixedJoint>();
-		//if (fj != null){
-			//Destroy(fj);
-		//}
 
-
-
-		/*if (gnd != null || bal != null){
-			connects = false;
-		}
-		else {
-			connects = true;
-		}*/
-
-		//if (hit_renderer == null){
-		//	hit_renderer = current_obj.GetComponentInChildren<MeshRenderer>();
-		//}
 
 		current_item.tint = new Color(1, 1, 1, 0.5f);
 	}
@@ -161,24 +138,13 @@ public class ConstructionMain : MonoBehaviour {
 	void ReleasePart(){
 		ConstRope rope = current_obj.GetComponent<ConstRope>();
 		if (hit_obj != null && current_item.connectType != ConstrItem.Connection.NoConnection /*connects*/){
-			//FixedJoint fj = current_obj.AddComponent<FixedJoint>();
-			//Rigidbody rgb = hit_obj.GetComponent<Rigidbody>();
-			//if (rgb == null){
-				//rgb = hit_obj.AddComponent<Rigidbody>();
-			//}
-			//rgb.isKinematic = true;
-			//fj.connectedBody = rgb;
 
 
 			ConnectPart(current_obj);
 			if (mirror_obj != null){
 				ConnectPart(mirror_obj);
 				HandleItemRelease(mirror_obj);
-				/*foreach(Collider x in mirr_item.colliders){
-					x.enabled = true;
-				}
-				mirr_item.DisableFadeMode();
-				mirr_item.tint = Color.white; */
+
 				mirror_obj = null;
 				mirr_item = null;
 			}
@@ -188,8 +154,6 @@ public class ConstructionMain : MonoBehaviour {
 				x.enabled = true;
 			}
 
-			/*current_item.DisableFadeMode();
-			current_item.tint = Color.white; */
 
 		}
 		HandleItemRelease(current_obj);
@@ -197,11 +161,9 @@ public class ConstructionMain : MonoBehaviour {
 		current_item = null;
 		
 		if (rope != null && !rope.reciever && rope.gameObject.GetComponent<ConstConnect>() != null ){
-			//GameObject second = (GameObject) Instantiate(rope.gameObject, rope.transform.position, rope.transform.rotation);
+
 			GameObject second = (GameObject) Instantiate(ropeend, rope.transform.position, rope.transform.rotation);
-			//ConstRope second_rope = second.GetComponent<ConstRope>();
-			//second_rope.reciever = true;
-			//second_rope.target = rope.transform;
+
 
 
 			PickUpPart(second);
@@ -242,18 +204,17 @@ public class ConstructionMain : MonoBehaviour {
 		hit = new RaycastHit();
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		int mask = 1 << 10;
-		//mask = ~mask;
+
 		if (Physics.Raycast(ray, out hit, mask)){
-			//Debug.Log("Found "+ hit.transform.name);
+
 
 			hit_obj = hit.transform.gameObject;
-			//Debug.Log(hit_obj.layer);
-			//on_obj = true;
+
 			return true;
 		}
 		else {
 			hit_obj = null;
-			//on_obj = false;
+
 			return false;
 		}
 	}
@@ -273,9 +234,6 @@ public class ConstructionMain : MonoBehaviour {
 	void CorrectItemRotation(Transform item, Vector3 dir){
 		Quaternion new_rot = Quaternion.identity;
 		Vector3 old_rot = item.rotation.eulerAngles;
-		//float new_y = Quaternion.LookRotation(pivot.position-hit.transform.position).eulerAngles.y;
-		//float new_y = Quaternion.LookRotation(-hit.normal).eulerAngles.y;
-		//new_rot = Quaternion.Euler(old_rot.x, new_y, old_rot.z);
 		Vector3 look = Quaternion.LookRotation(dir).eulerAngles;
 		new_rot = Quaternion.Euler(look+rot_offset);// + Quaternion.Euler(rot_offset);
 		item.rotation = new_rot;
@@ -291,8 +249,7 @@ public class ConstructionMain : MonoBehaviour {
 
 			mirror_obj = (GameObject) Instantiate(current_obj, mirr_pos, Quaternion.identity);
 			mirr_item = mirror_obj.GetComponent<ConstrItem>();
-			//mirr_item.tint = new Color(0, 0.5f, 0.2f, 0.3f);
-			//Debug.Log(mirr_item.tint);
+
 			item_no++;
 			mirr_item.item_id = item_no;
 		}

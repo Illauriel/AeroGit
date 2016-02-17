@@ -9,7 +9,7 @@ public class SaveModel : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		savepath = Application.dataPath+"Resources/Saves";
+		savepath = Application.dataPath+"/Saves";
 		if ( !Directory.Exists(savepath)){
 			Debug.LogWarning("Creating new save directory");
 			Directory.CreateDirectory(savepath);
