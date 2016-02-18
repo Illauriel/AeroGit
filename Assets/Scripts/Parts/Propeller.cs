@@ -15,6 +15,8 @@ public class Propeller : Thruster {
 	public GameObject discus;
 	//bool disc;
 
+	//AudioSource audi;
+
 	public Rigidbody myBody;
 	float velocity;
 	// Use this for initialization
@@ -22,6 +24,7 @@ public class Propeller : Thruster {
 		//myRenderer = gameObject.GetComponent<Renderer>();
 		if (gameObject.GetComponentInParent<Rigidbody>() != null){
 			myBody = gameObject.GetComponentInParent<Rigidbody>();
+		//	audi = GetComponent<AudioSource> ();
 		}
 	}
 	
