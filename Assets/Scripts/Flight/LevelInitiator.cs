@@ -9,9 +9,12 @@ public class LevelInitiator : MonoBehaviour {
 	public string[] lines;
 	public GameObject[] hierarchy;
 
+	int[] indices;
 	Balloon[] balloons;
 	Ballast[] ballasts;
 	Engine[] engines;
+
+	InputManager inp;
 
 	// Use this for initialization
 	void Start () {
@@ -21,8 +24,13 @@ public class LevelInitiator : MonoBehaviour {
 		}
 		//lines = save_file.text.Split('\n');
 		lines = savetext.Split('\n');
+
+		indices = new int[3];
+		inp = GameObject.Find("GameController").GetComponent<InputManager>();
+
 		CreateBuild();
 		//save_file = Resources.Load("Saves/testsave.txt") as TextAsset;
+
 
 	}
 
@@ -36,7 +44,27 @@ public class LevelInitiator : MonoBehaviour {
 			Quaternion rot = Quaternion.Euler(ReadVector(substrings[3]));
 			Debug.Log(i+ ") adds to place " + place);
 			hierarchy[place] = (GameObject) Instantiate(temp_obj, pos, rot);
+
+			Balloon tmp_ball = hierarchy[place].GetComponent<Balloon>();
+			Ballast tmp_last = hierarchy[place].GetComponent<Ballast>();
+			Engine  tmp_engn = hierarchy[place].GetComponent<Engine>();
+
+			if (tmp_ball != null){
+				indices[0]++;
+			}
+			else if (tmp_last != null){
+				indices[1]++;
+			}
+			else if (tmp_engn != null){
+				indices[2]++;
+			}
 		}
+		balloons = new Balloon[indices[0]];
+		//Smth about ballast
+		engines = new Engine[indices[2]];
+		indices[0] = 0;
+		indices[2] = 0;
+
 		//establish Connections
 		for (int i = 0; i < lines.Length-1; i++) {
 			string[] substrings = lines[i].Split('|');
@@ -61,8 +89,27 @@ public class LevelInitiator : MonoBehaviour {
 
 				}
 			}
+			Balloon tmp_ball = hierarchy[place].GetComponent<Balloon>();
+			Ballast tmp_last = hierarchy[place].GetComponent<Ballast>();
+			Engine  tmp_engn = hierarchy[place].GetComponent<Engine>();
+			
+			if (tmp_ball != null){
+				balloons[indices[0]] = tmp_ball;
+				indices[0]++;
+			}
+			else if (tmp_last != null){
+				indices[1]++;
+			}
+			else if (tmp_engn != null){
+				engines[indices[2]] = tmp_engn;
+				indices[2]++;
+			}
+
 
 		}
+
+		inp.balloons = balloons;
+		inp.engines = engines;
 	}
 
 	int FindEntry(string id){
