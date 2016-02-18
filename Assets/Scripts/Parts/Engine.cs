@@ -4,6 +4,7 @@ using System.Collections;
 public class Engine : MonoBehaviour {
 
 	public float rpm;
+	public float temperature;
 	public float[] rpm_stages;
 	public int cur_gear;
 	public int prev_gear;
@@ -12,7 +13,14 @@ public class Engine : MonoBehaviour {
 	public bool stalling;
 	public float stall_time;
 	public bool accel; //are we on accel or decel?
-	
+	public float delta_temp;
+	public float critical_temp;
+
+	public GameObject explosion;
+	public GameObject fire;
+	public GameObject destroyed;
+
+	public Atmosphere atm;
 	// Use this for initialization
 	
 	// Update is called once per frame
@@ -78,6 +86,22 @@ public class Engine : MonoBehaviour {
 			transform.rotation = Quaternion.Euler(new Vector3(roll_x, roll_y, roll_z));
 		}
 
+		float rot_d_temp = (rpm/2 - temperature) * 0.004f;
+		float atm_d_temp = ((atm.temperature - 273.15f) - temperature) * atm.density * 0.004f;
+		delta_temp = rot_d_temp + atm_d_temp;
+		temperature += delta_temp;
+
+		if (temperature > critical_temp){
+			ExplodeEngine();
+		}
+		else if (temperature < -10){
+			stalling = true;
+		}
+
+		if (atm.density < 0.7f){
+			stalling = true;
+		}
+
 	}
 
 	public void GearUp(){
@@ -107,5 +131,14 @@ public class Engine : MonoBehaviour {
 			}
 			Debug.Log("Gear Down to "+cur_gear);
 		}
+	}
+
+	public void ExplodeEngine(){
+		GameObject carcass = (GameObject) Instantiate(destroyed, transform.position, transform.rotation);
+		Instantiate(explosion, transform.position, Quaternion.identity);
+		GameObject flame = (GameObject) Instantiate(fire, transform.position, Quaternion.identity);
+		flame.transform.parent = carcass.transform;
+		Destroy(gameObject);
+
 	}
 }
