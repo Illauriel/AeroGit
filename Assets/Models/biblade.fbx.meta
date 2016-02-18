@@ -1,52 +1,32 @@
 fileFormatVersion: 2
-guid: d522ccdc4981e4d8691432f7c39f703d
-timeCreated: 1455740440
+guid: c0485279eb5758a4982206922b9df33a
+timeCreated: 1455815528
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Cube
-    100002: Cube.001
-    100004: Cube.002
-    100006: Cube.003
+    100000: bblade
+    100002: bblade.001
+    100004: bblade.002
+    100006: bblade.003
     100008: //RootNode
-    100010: bblade
-    100012: bblade.001
-    100014: bblade.002
-    100016: bblade.003
-    400000: Cube
-    400002: Cube.001
-    400004: Cube.002
-    400006: Cube.003
+    400000: bblade
+    400002: bblade.001
+    400004: bblade.002
+    400006: bblade.003
     400008: //RootNode
-    400010: bblade
-    400012: bblade.001
-    400014: bblade.002
-    400016: bblade.003
-    2300000: Cube
-    2300002: Cube.001
-    2300004: Cube.002
-    2300006: Cube.003
-    2300008: bblade
-    2300010: bblade.001
-    2300012: bblade.002
-    2300014: bblade.003
-    3300000: Cube
-    3300002: Cube.001
-    3300004: Cube.002
-    3300006: Cube.003
-    3300008: bblade
-    3300010: bblade.001
-    3300012: bblade.002
-    3300014: bblade.003
-    4300000: Cube.003
-    4300002: Cube.002
-    4300004: Cube.001
-    4300006: Cube
-    4300008: bblade.003
-    4300010: bblade.002
-    4300012: bblade.001
-    4300014: bblade
+    2300000: bblade
+    2300002: bblade.001
+    2300004: bblade.002
+    2300006: bblade.003
+    3300000: bblade
+    3300002: bblade.001
+    3300004: bblade.002
+    3300006: bblade.003
+    4300000: bblade.003
+    4300002: bblade.002
+    4300004: bblade.001
+    4300006: bblade
   materials:
     importMaterials: 1
     materialName: 0
@@ -89,7 +69,7 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 4
+    tangentImportMode: 3
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
