@@ -9,6 +9,10 @@ public class LevelInitiator : MonoBehaviour {
 	public string[] lines;
 	public GameObject[] hierarchy;
 
+	Balloon[] balloons;
+	Ballast[] ballasts;
+	Engine[] engines;
+
 	// Use this for initialization
 	void Start () {
 		GameObject crutch = GameObject.Find("Savecrutch");

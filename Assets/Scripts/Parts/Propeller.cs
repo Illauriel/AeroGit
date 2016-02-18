@@ -12,6 +12,8 @@ public class Propeller : Thruster {
 	public GameObject[] normal;
 	public GameObject[] blurry;
 	public GameObject[] broken;
+	public GameObject discus;
+	//bool disc;
 
 	public Rigidbody myBody;
 	float velocity;
@@ -49,7 +51,12 @@ public class Propeller : Thruster {
 			for (int i = 0; i < normal.Length; i++) {
 				if ( !broken[i].activeSelf ){
 					normal[i].SetActive(false);
-					blurry[i].SetActive(true);
+					if (discus == null){
+						blurry[i].SetActive(true);
+					}
+					else{
+						discus.SetActive(true);
+					}
 				}
 			}
 			//blurry.enabled = true;
@@ -61,7 +68,12 @@ public class Propeller : Thruster {
 			for (int i = 0; i < normal.Length; i++) {
 				if ( !broken[i].activeSelf ){
 					normal[i].SetActive(true);
-					blurry[i].SetActive(false);
+					if (discus == null){
+						blurry[i].SetActive(false);
+					}
+					else{
+						discus.SetActive(false);
+					}
 				}
 			}
 		}
