@@ -10,7 +10,7 @@ public class Propeller : Thruster {
 	//public AerialPhysics phys;
 	public float rpm;
 	public GameObject[] normal;
-	public GameObject[] blurry;
+	//public GameObject[] blurry;
 	public GameObject[] broken;
 	public GameObject discus;
 	//bool disc;
@@ -47,12 +47,12 @@ public class Propeller : Thruster {
 			thrust = (4.3924e-8f * rpm * Mathf.Pow(in_diameter, 3.5f))/Mathf.Sqrt(in_pitch)*(4.23333e-4f * rpm * in_pitch - velocity); 
 
 		}
-		if (rpm > 350 && blurry[0].activeSelf == false){
+		if (rpm > 350 && discus.activeSelf == false){
 			for (int i = 0; i < normal.Length; i++) {
 				if ( !broken[i].activeSelf ){
 					normal[i].SetActive(false);
 					if (discus == null){
-						blurry[i].SetActive(true);
+						discus.SetActive(true);
 					}
 					else{
 						discus.SetActive(true);
@@ -62,14 +62,14 @@ public class Propeller : Thruster {
 			//blurry.enabled = true;
 		//	myRenderer.enabled = false;
 		}
-		else if (rpm <= 350 && blurry[0].activeSelf == true){
+		else if (rpm <= 350 && discus.activeSelf == true){
 			//blurry.enabled = false;
 			//myRenderer.enabled = true;
 			for (int i = 0; i < normal.Length; i++) {
 				if ( !broken[i].activeSelf ){
 					normal[i].SetActive(true);
 					if (discus == null){
-						blurry[i].SetActive(false);
+						discus.SetActive(false);
 					}
 					else{
 						discus.SetActive(false);
