@@ -14,8 +14,9 @@ public class Propeller : Thruster {
 	public GameObject[] broken;
 	public GameObject discus;
 	//bool disc;
+	public AudioSource audioSource;
 
-	//AudioSource audi;
+
 
 	public Rigidbody myBody;
 	float velocity;
@@ -24,12 +25,20 @@ public class Propeller : Thruster {
 		//myRenderer = gameObject.GetComponent<Renderer>();
 		if (gameObject.GetComponentInParent<Rigidbody>() != null){
 			myBody = gameObject.GetComponentInParent<Rigidbody>();
-		//	audi = GetComponent<AudioSource> ();
+			audioSource = GetComponent<AudioSource> ();
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		audioSource.pitch = 0f;
+		if (engine.rpm < 500) {
+			audioSource.pitch = engine.rpm / 500;
+		} 
+		else {
+			audioSource.pitch = 1 + (engine.rpm - 500) / 2500;
+		}
+
 		if (engine != null){
 			rpm = engine.rpm;
 			velocity = myBody.velocity.z;
