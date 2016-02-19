@@ -68,6 +68,8 @@ public class InputManager : MonoBehaviour {
 			if (Input.GetKey(KeyCode.C)){
 				foreach(Balloon x in balloons){
 					x.gas_vol += Time.deltaTime*30;
+					//Debug.Log("Pshhhhh");
+					ChoseContainer(1, Time.deltaTime*30);
 					if (x.gas_vol > x.max_vol){
 						x.gas_vol = x.max_vol;
 					}
@@ -144,6 +146,7 @@ public class InputManager : MonoBehaviour {
 	}
 
 	void ChoseContainer(int id, float amount){
+		//Debug.Log("Chosing");
 		FuelContainer[] containers = new FuelContainer[0];
 		switch (id){
 		case 0: containers = gas_cont; break;
@@ -151,8 +154,10 @@ public class InputManager : MonoBehaviour {
 		case 2: containers = water_cont; break;
 		}
 		if (containers.Length > 0){
+			//Debug.Log(containers[0]);
 			for (int i = 0; i < containers.Length; i++) {
 				if (containers[i].volume >0){
+					//Debug.Log("containers " + containers[i].name + " vol = "+ containers[i].volume);
 					containers[i].SpendFuel(amount);
 					break;
 				}

@@ -91,8 +91,9 @@ public class LevelInitiator : MonoBehaviour {
 			if (substrings.Length > 4){
 				FixedJoint fj = hierarchy[place].AddComponent<FixedJoint>();
 				int connect_id = int.Parse(substrings[4]);
+				Debug.Log ("Connecting " + hierarchy[place].name +" to "+hierarchy[connect_id]);
 				fj.connectedBody = hierarchy[connect_id].GetComponent<Rigidbody>();
-				fj.breakForce = 1200f;
+				//fj.breakForce = 5100f;
 				if (substrings.Length > 5){
 					RopeGen rope = hierarchy[place].GetComponent<RopeGen>();
 					int anchor_id = int.Parse(substrings[5]);

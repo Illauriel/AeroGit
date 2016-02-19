@@ -10,6 +10,7 @@ public class Balloon : MonoBehaviour {
 	public float lift;
 
 	public GameObject envelope;
+	public GameObject cell;
 
 	public float size = 2;
 	public float min_size;
@@ -33,8 +34,9 @@ public class Balloon : MonoBehaviour {
 			/*GameObject hinge = new GameObject("GasCellHinge");
 			hinge.transform.position = transform.position;
 			Rigidbody h_body = hinge.AddComponent<Rigidbody>();*/
-
-		/*	//cj_a = hinge.AddComponent<ConfigurableJoint>();
+		/*if (cell != null	){
+			Rigidbody cellbody = cell.GetComponent<Rigidbody>();
+			//cj_a = hinge.AddComponent<ConfigurableJoint>();
 			cj_a = gameObject.AddComponent<ConfigurableJoint>();
 			//cj_b = envelope.AddComponent<ConfigurableJoint>();
 
@@ -42,6 +44,8 @@ public class Balloon : MonoBehaviour {
 			cj_a.yMotion = ConfigurableJointMotion.Limited;
 			cj_a.zMotion = ConfigurableJointMotion.Limited;
 
+			cj_a.connectedBody = cellbody;
+		}*/
 			/*cj_b.xMotion = ConfigurableJointMotion.Locked;
 			cj_b.yMotion = ConfigurableJointMotion.Locked;
 			cj_b.zMotion = ConfigurableJointMotion.Locked;*/
@@ -69,14 +73,14 @@ public class Balloon : MonoBehaviour {
 		else if (size < min_size){
 			size = min_size;
 		}
-		//gameObject.transform.localScale = new Vector3(size, size, size);
+		cell.transform.localScale = new Vector3(size, size, size);
 		/*SoftJointLimit sjl = new SoftJointLimit();
-		//SoftJointLimitSpring spr = new SoftJointLimitSpring();
+		SoftJointLimitSpring spr = new SoftJointLimitSpring();
 
 		sjl.limit = (max_size - size)*0.52f;
 		cj_a.linearLimit = sjl;
-		//spr.damper = 1;
-		//cj_a.linearLimitSpring = spr; */
+		spr.damper = 1;
+		cj_a.linearLimitSpring = spr; */
 
 	}
 	void FixedUpdate(){

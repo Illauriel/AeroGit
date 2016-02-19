@@ -18,6 +18,7 @@ public class FuelContainer : MonoBehaviour {
 	}
 
 	public void SpendFuel (float amount){
+		Debug.Log("Spending "+ amount + " fuel");
 		volume -= amount;
 		my_body.mass -= amount * unit_weight;
 	}
