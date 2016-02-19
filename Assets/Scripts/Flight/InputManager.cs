@@ -6,10 +6,14 @@ public class InputManager : MonoBehaviour {
 	//public ForcesManager forc;
 	CameraController cam;
 	public Balloon[] balloons;
-	public Ballast last;
+	public Ballast[] last;
 	public Engine[] engines;
+	public FuelContainer[] gas_cont;
+	public FuelContainer[] hydro_cont;
+	public FuelContainer[] water_cont;
 	public bool const_mode;
 	ConstructionMain constr;
+	int ballast_index;
 	// Use this for initialization
 	void Start () {
 		if (cam == null){
@@ -72,7 +76,13 @@ public class InputManager : MonoBehaviour {
 		}
 		//Ballast
 		if (Input.GetKeyDown(KeyCode.Space)){
-			last.Drop();
+			if (ballast_index < last.Length){
+				last[ballast_index].Drop();
+				ballast_index ++;
+			}
+			else{
+				ChoseContainer(2, Time.deltaTime * 5);
+			}
 		}
 		if (engines.Length > 0){
 		//RPM Control
@@ -131,5 +141,25 @@ public class InputManager : MonoBehaviour {
 			input = 360 + input;
 		}
 		return input;
+	}
+
+	void ChoseContainer(int id, float amount){
+		FuelContainer[] containers = new FuelContainer[0];
+		switch (id){
+		case 0: containers = gas_cont; break;
+		case 1: containers = hydro_cont; break;
+		case 2: containers = water_cont; break;
+		}
+		if (containers.Length > 0){
+			for (int i = 0; i < containers.Length; i++) {
+				if (containers[i].volume >0){
+					containers[i].SpendFuel(amount);
+					break;
+				}
+				else if (i == containers.Length-1 && containers[i].volume <= 0){
+					Debug.LogWarning("DasWas " +id);
+				}
+			}
+		}
 	}
 }

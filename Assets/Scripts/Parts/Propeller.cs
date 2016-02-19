@@ -25,6 +25,9 @@ public class Propeller : Thruster {
 		//myRenderer = gameObject.GetComponent<Renderer>();
 		if (gameObject.GetComponentInParent<Rigidbody>() != null){
 			myBody = gameObject.GetComponentInParent<Rigidbody>();
+
+		}
+		if (audioSource == null){
 			audioSource = GetComponent<AudioSource> ();
 		}
 	}
@@ -32,11 +35,11 @@ public class Propeller : Thruster {
 	// Update is called once per frame
 	void Update () {
 		audioSource.pitch = 0f;
-		if (engine.rpm < 500) {
-			audioSource.pitch = engine.rpm / 500;
+		if (rpm < 500) {
+			audioSource.pitch = rpm / 500;
 		} 
 		else {
-			audioSource.pitch = 1 + (engine.rpm - 500) / 2500;
+			audioSource.pitch = 1 + (rpm - 500) / 2500;
 		}
 
 		if (engine != null){

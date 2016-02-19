@@ -21,9 +21,9 @@ public class CloudWind : MonoBehaviour {
 			Quaternion myRotation = Quaternion.LookRotation(my_wind);
 			//transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, myRotation.y);
 			transform.rotation = myRotation;
-			Debug.Log (myRotation.eulerAngles);
+			//Debug.Log (myRotation.eulerAngles);
 			set = true;
-			Debug.Log(transform.rotation.eulerAngles);
+			//Debug.Log(transform.rotation.eulerAngles);
 		}
 	}
 }
