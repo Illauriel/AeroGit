@@ -22,9 +22,33 @@ public class Engine : MonoBehaviour {
 
 	public Atmosphere atm;
 	// Use this for initialization
+
+	public AudioSource[] sourses;
+
+	public AudioClip startSound;
+	public AudioClip workSound;
+	public AudioClip endSound;
+
+	void Start(){
+		sourses = GetComponents<AudioSource> ();
+		sourses [0].clip = startSound;
+		sourses [1].clip = workSound;
+		sourses [2].clip = endSound;
+		sourses [1].loop = true;
+	}
 	
 	// Update is called once per frame
 	void Update () {
+		
+	
+		sourses[1].pitch = 0f;
+		if (rpm < 500) {
+			sourses[1].pitch = rpm / 500;
+		} 
+		else {
+			sourses[1].pitch = 1 + (rpm - 500) / 2500;
+		}
+
 		//Debug.Log("rpm<trg:" + rpm < target_rpm + "rpm>trg:"+rpm > target_rpm +  "rpm>=low:" + rpm >= rpm_stages[cur_gear-1]);
 		//MAKE IT ACCOUNT FOR REVERSE LATER
 		if (accel){
@@ -105,9 +129,18 @@ public class Engine : MonoBehaviour {
 	}
 
 	public void GearUp(){
+
+
+
 		if (!stalling && cur_gear<rpm_stages.Length-1){
 			prev_gear = cur_gear;
 			cur_gear++;
+			if (cur_gear == 1 && prev_gear == 0) {
+				sourses [0].Play ();
+				sourses [1].Play ();
+				Debug.Log ("Starting Engine" + sourses [0].isPlaying);
+			}
+		
 
 			if (rpm < rpm_stages[cur_gear]){
 				accel = true;
@@ -123,6 +156,9 @@ public class Engine : MonoBehaviour {
 		if (!stalling && cur_gear>0){
 			prev_gear = cur_gear;
 			cur_gear--;
+			if (cur_gear == 0 && prev_gear == 1) {
+				sourses [1].Stop ();
+			} 
 			if (rpm < rpm_stages[cur_gear]){
 				accel = true;
 			}
