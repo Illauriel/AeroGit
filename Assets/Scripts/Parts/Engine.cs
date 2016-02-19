@@ -32,6 +32,8 @@ public class Engine : MonoBehaviour {
 	public AudioClip fireSound;
 	public AudioClip EngGearUp;
 
+	Transform child;
+
 	void Start(){
 		sourses = GetComponents<AudioSource> ();
 		sourses [0].clip = startSound;
@@ -39,6 +41,8 @@ public class Engine : MonoBehaviour {
 		sourses [2].clip = endSound;
 		sourses [3].clip = EngGearUp;
 		sourses [1].loop = true;
+
+		child = GetComponentInChildren<MeshRenderer>().transform;
 	}
 	
 	// Update is called once per frame
@@ -106,12 +110,13 @@ public class Engine : MonoBehaviour {
 		}
 
 		if (rpm > 0){
+			float rotangle = 10f;
 			float rot_ratio = rpm / rpm_stages[rpm_stages.Length-1];
-			float roll_x = Random.Range(-15 * rot_ratio, 15 * rot_ratio);
-			float roll_y = Random.Range(-15 * rot_ratio, 15 * rot_ratio);
-			float roll_z = Random.Range(-15 * rot_ratio, 15 * rot_ratio);
+			float roll_x = Random.Range(-rotangle * rot_ratio, rotangle * rot_ratio);
+			float roll_y = Random.Range(-rotangle * rot_ratio, rotangle * rot_ratio);
+			float roll_z = Random.Range(-rotangle * rot_ratio, rotangle * rot_ratio);
 
-			transform.rotation = Quaternion.Euler(new Vector3(roll_x, roll_y, roll_z));
+			child.localRotation = Quaternion.Euler(new Vector3(roll_x, roll_y, roll_z));
 		}
 
 		float rot_d_temp = (rpm/2 - temperature) * 0.004f;

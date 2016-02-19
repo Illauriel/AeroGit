@@ -17,7 +17,12 @@ public class LevelInitiator : MonoBehaviour {
 	FuelContainer[] hydro_cont;
 	FuelContainer[] water_cont;
 
+	Propeller[] props;
+
+	public CapsuleCollider[] floor;
+
 	InputManager inp;
+	Atmosphere atm;
 
 	// Use this for initialization
 	void Start () {
@@ -28,8 +33,9 @@ public class LevelInitiator : MonoBehaviour {
 		//lines = save_file.text.Split('\n');
 		lines = savetext.Split('\n');
 
-		indices = new int[6];
+		indices = new int[7];
 		inp = GameObject.Find("GameController").GetComponent<InputManager>();
+		atm = GameObject.Find("GameController").GetComponent<Atmosphere>();
 
 		CreateBuild();
 		//save_file = Resources.Load("Saves/testsave.txt") as TextAsset;
@@ -52,9 +58,11 @@ public class LevelInitiator : MonoBehaviour {
 			Ballast tmp_last = hierarchy[place].GetComponent<Ballast>();
 			Engine  tmp_engn = hierarchy[place].GetComponent<Engine>();
 			FuelContainer tmp_fuel = hierarchy[place].GetComponent<FuelContainer>();
+			Propeller tmp_prop = hierarchy[place].GetComponent<Propeller>();
 
 			if (tmp_ball != null){
 				indices[0]++;
+				tmp_ball.GetComponentInChildren<Cloth>().capsuleColliders = floor;
 			}
 			else if (tmp_last != null){
 				indices[1]++;
@@ -69,6 +77,9 @@ public class LevelInitiator : MonoBehaviour {
 				case FuelContainer.ResType.Water: indices[5]++; break;
 				}
 			}
+			else if (tmp_prop != null){
+				indices[6]++;
+			}
 		}
 		balloons = new Balloon[indices[0]];
 		ballasts = new Ballast[indices[1]];
@@ -76,11 +87,13 @@ public class LevelInitiator : MonoBehaviour {
 		gas_cont = new FuelContainer[indices[3]];
 		hydro_cont = new FuelContainer[indices[4]];
 		water_cont = new FuelContainer[indices[5]];
+		props = new Propeller[indices[6]];
 		for (int i = 0; i < indices.Length; i++) {
 			
 		
 			indices[i] = 0;
 		}
+
 
 
 		//establish Connections
@@ -112,16 +125,20 @@ public class LevelInitiator : MonoBehaviour {
 			Ballast tmp_last = hierarchy[place].GetComponent<Ballast>();
 			Engine  tmp_engn = hierarchy[place].GetComponent<Engine>();
 			FuelContainer tmp_fuel = hierarchy[place].GetComponent<FuelContainer>();
+			Propeller tmp_prop = hierarchy[place].GetComponent<Propeller>();
 
 			if (tmp_ball != null){
 				balloons[indices[0]] = tmp_ball;
+				balloons[indices[0]].atm = atm;
 				indices[0]++;
 			}
 			else if (tmp_last != null){
+				ballasts[indices[1]] = tmp_last;
 				indices[1]++;
 			}
 			else if (tmp_engn != null){
 				engines[indices[2]] = tmp_engn;
+				engines[indices[2]].atm = atm;
 				indices[2]++;
 			}
 			else if (tmp_fuel != null){
@@ -131,7 +148,15 @@ public class LevelInitiator : MonoBehaviour {
 				case FuelContainer.ResType.Water: water_cont[indices[5]] = tmp_fuel; indices[5]++; break;
 				}
 			}
+			else if (tmp_prop != null){
+				props[indices[6]] = tmp_prop;
+				Destroy(GetComponent<FixedJoint>());
+				//Destroy(GetComponent<Rigidbody>());
+				GetComponent<Rigidbody>().isKinematic = true;
 
+
+				indices[6]++;
+			}
 
 		}
 
@@ -141,6 +166,19 @@ public class LevelInitiator : MonoBehaviour {
 		inp.gas_cont = gas_cont;
 		inp.hydro_cont = hydro_cont;
 		inp.water_cont = water_cont;
+
+		foreach (Propeller x in props){
+			if (engines.Length > 0){
+				x.engine = engines[0];
+				x.transform.parent = engines[0].transform;
+			}
+			else{
+				x.transform.parent = hierarchy[0].transform;
+			}
+		}
+
+		Camera.main.gameObject.GetComponent<CameraController>().target = hierarchy[0].transform;
+		atm.measured_obj = hierarchy[0];
 	}
 
 	int FindEntry(string id){
@@ -148,6 +186,7 @@ public class LevelInitiator : MonoBehaviour {
 		for (int i = 0; i < data.item_names.Length; i++) {
 			if (data.item_names[i] == id){
 				result = i;
+				Debug.Log("Entry named \""+id+"\" found" );
 				break;
 			}
 		}

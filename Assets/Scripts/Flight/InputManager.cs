@@ -67,9 +67,11 @@ public class InputManager : MonoBehaviour {
 			}
 			if (Input.GetKey(KeyCode.C)){
 				foreach(Balloon x in balloons){
-					x.gas_vol += Time.deltaTime*30;
+
 					//Debug.Log("Pshhhhh");
-					ChoseContainer(1, Time.deltaTime*30);
+					if (ChoseContainer(1, Time.deltaTime*30)){
+						x.gas_vol += Time.deltaTime*30;
+					}
 					if (x.gas_vol > x.max_vol){
 						x.gas_vol = x.max_vol;
 					}
@@ -135,9 +137,9 @@ public class InputManager : MonoBehaviour {
 			if (Input.GetKeyDown(KeyCode.Space)){
 				constr.rot_offset = Vector3.zero;
 			}
-			if (Input.GetKeyDown(KeyCode.Space)){
+			/*if (Input.GetKeyDown(KeyCode.Space)){
 				constr.mirroring = ! constr.mirroring;
-			}
+			}*/
 		}
 	}
 	float ConstrainAngle(float input){
@@ -150,7 +152,7 @@ public class InputManager : MonoBehaviour {
 		return input;
 	}
 
-	void ChoseContainer(int id, float amount){
+	bool ChoseContainer(int id, float amount){
 		//Debug.Log("Chosing");
 		FuelContainer[] containers = new FuelContainer[0];
 		switch (id){
@@ -164,12 +166,23 @@ public class InputManager : MonoBehaviour {
 				if (containers[i].volume >0){
 					//Debug.Log("containers " + containers[i].name + " vol = "+ containers[i].volume);
 					containers[i].SpendFuel(amount);
+					return true;
 					break;
 				}
 				else if (i == containers.Length-1 && containers[i].volume <= 0){
 					Debug.LogWarning("DasWas " +id);
+					return false;
 				}
+				/*else{
+
+				}*/
+
 			}
+
 		}
+		/*else{
+			return false;
+		}*/
+		return false;
 	}
 }

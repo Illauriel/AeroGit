@@ -29,7 +29,7 @@ public class ConstructionMain : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//plane.SetNormalAndPosition(
-
+		mirroring = false;
 		if (current_obj != null){
 			/*if (Physics.Raycast(ray, out hit)){
 				if (hit.transform.gameObject == grid){
@@ -75,13 +75,13 @@ public class ConstructionMain : MonoBehaviour {
 				PlaceOnPlane();
 			}
 
-			if (Input.GetMouseButtonDown(0)){
+			if (! delete_mode && Input.GetMouseButtonDown(0)){
 				ReleasePart();
 			}
 
 		}
 		else {
-			if (Input.GetMouseButtonDown(0)){
+			if (! delete_mode && Input.GetMouseButtonDown(0)){
 				Debug.Log("PickingUp");
 				RaycastHit hit = new RaycastHit();
 				if (ProbeUranus(out hit)){
@@ -100,6 +100,7 @@ public class ConstructionMain : MonoBehaviour {
 		}
 		else if (delete_mode && Input.GetMouseButtonDown(0)){
 			DestroyPart();
+			delete_mode = false;
 		}
 		/*else {
 			delete_mode = false;
@@ -202,7 +203,7 @@ public class ConstructionMain : MonoBehaviour {
 	}
 
 	void DestroyPart(){
-
+		Destroy(current_obj);
 	}
 
 	void ConnectPart(GameObject part){

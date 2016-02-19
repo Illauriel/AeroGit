@@ -24,7 +24,7 @@ public class Propeller : Thruster {
 	void Start () {
 		//myRenderer = gameObject.GetComponent<Renderer>();
 		if (gameObject.GetComponentInParent<Rigidbody>() != null){
-			myBody = gameObject.GetComponentInParent<Rigidbody>();
+			myBody = engine.GetComponent<Rigidbody>();
 
 		}
 		if (audioSource == null){
@@ -56,6 +56,9 @@ public class Propeller : Thruster {
 		}
 		if (rpm>0){
 			transform.Rotate(Vector3.up, 360 * Time.deltaTime * (rpm/60));
+			//transform.RotateAround(transform.localPosition, transform.up, 360 * Time.deltaTime * (rpm/60));
+			//Vector3 local = transform.localRotation.eulerAngles;
+			//transform.localRotation = Quaternion.Euler(local.x, local.y+360 * Time.deltaTime * (rpm/60), local.z);
 
 			float in_diameter = diameter/2.54f;
 			float in_pitch = diameter/2.54f;
@@ -96,8 +99,8 @@ public class Propeller : Thruster {
 	}
 
 	void LateUpdate(){
-		//myBody.AddForceAtPosition(-transform.up * thrust, transform.localPosition);
-		Debug.DrawLine(transform.localPosition, -transform.up * thrust);
+		myBody.AddForceAtPosition(-transform.up * thrust, transform.position);
+		Debug.DrawLine(transform.position, (-transform.up * thrust));
 		//Debug.Log(-transform.up * thrust);
 	}
 }
