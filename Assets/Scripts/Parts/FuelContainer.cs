@@ -15,11 +15,16 @@ public class FuelContainer : MonoBehaviour {
 		unit_weight = wts[(int) resType];
 		my_body = GetComponent<Rigidbody>();
 		my_body.mass += volume * unit_weight;
+		audio.loop = true;
 	}
 
 	public void SpendFuel (float amount){
 		Debug.Log("Spending "+ amount + " fuel");
 		volume -= amount;
 		my_body.mass -= amount * unit_weight;
+		if (resType == ResType.Hydrogen && !audio.isPlaying) {
+			audio.Play ();
+		}
+
 	}
 }

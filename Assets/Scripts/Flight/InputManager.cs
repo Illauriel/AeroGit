@@ -75,6 +75,11 @@ public class InputManager : MonoBehaviour {
 					}
 				}
 			}
+			if (Input.GetKeyUp (KeyCode.C)) {
+				foreach (var x in hydro_cont) {
+					x.audio.Stop ();
+				}
+			}
 		}
 		//Ballast
 		if (Input.GetKeyDown(KeyCode.Space)){
