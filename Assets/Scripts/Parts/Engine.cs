@@ -28,12 +28,16 @@ public class Engine : MonoBehaviour {
 	public AudioClip startSound;
 	public AudioClip workSound;
 	public AudioClip endSound;
+	public AudioClip explodeSound;
+	public AudioClip fireSound;
+	public AudioClip EngGearUp;
 
 	void Start(){
 		sourses = GetComponents<AudioSource> ();
 		sourses [0].clip = startSound;
 		sourses [1].clip = workSound;
 		sourses [2].clip = endSound;
+		sourses [3].clip = EngGearUp;
 		sourses [1].loop = true;
 	}
 	
@@ -43,10 +47,10 @@ public class Engine : MonoBehaviour {
 	
 		sourses[1].pitch = 0f;
 		if (rpm < 500) {
-			sourses[1].pitch = rpm / 500;
+			sourses[1].pitch = rpm / 800;
 		} 
 		else {
-			sourses[1].pitch = 1 + (rpm - 500) / 2500;
+			sourses[1].pitch = 1 + (rpm - 800) / 4000;
 		}
 
 		//Debug.Log("rpm<trg:" + rpm < target_rpm + "rpm>trg:"+rpm > target_rpm +  "rpm>=low:" + rpm >= rpm_stages[cur_gear-1]);
@@ -117,6 +121,7 @@ public class Engine : MonoBehaviour {
 
 		if (temperature > critical_temp){
 			ExplodeEngine();
+
 		}
 		else if (temperature < -10){
 			stalling = true;
@@ -135,6 +140,7 @@ public class Engine : MonoBehaviour {
 		if (!stalling && cur_gear<rpm_stages.Length-1){
 			prev_gear = cur_gear;
 			cur_gear++;
+			sourses [3].Play ();
 			if (cur_gear == 1 && prev_gear == 0) {
 				sourses [0].Play ();
 				sourses [1].Play ();
@@ -158,6 +164,7 @@ public class Engine : MonoBehaviour {
 			cur_gear--;
 			if (cur_gear == 0 && prev_gear == 1) {
 				sourses [1].Stop ();
+				sourses [2].Play ();
 			} 
 			if (rpm < rpm_stages[cur_gear]){
 				accel = true;
@@ -171,8 +178,19 @@ public class Engine : MonoBehaviour {
 
 	public void ExplodeEngine(){
 		GameObject carcass = (GameObject) Instantiate(destroyed, transform.position, transform.rotation);
-		Instantiate(explosion, transform.position, Quaternion.identity);
+		GameObject explode = (GameObject) Instantiate(explosion, transform.position, Quaternion.identity);
 		GameObject flame = (GameObject) Instantiate(fire, transform.position, Quaternion.identity);
+
+		AudioSource expSound = explode.AddComponent<AudioSource> ();
+		expSound.spatialBlend = 1;
+		expSound.clip = explodeSound;
+		expSound.Play ();
+
+		AudioSource flameSound = flame.AddComponent<AudioSource> ();
+		flameSound.spatialBlend = 1;
+		flameSound.clip = fireSound;
+		flameSound.Play ();
+
 		flame.transform.parent = carcass.transform;
 		Destroy(gameObject);
 
