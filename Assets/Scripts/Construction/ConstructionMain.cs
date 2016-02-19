@@ -46,6 +46,7 @@ public class ConstructionMain : MonoBehaviour {
 			}
 			RaycastHit hit = new RaycastHit();
 			if (ProbeUranus(out hit) && current_item.connectType != ConstrItem.Connection.NoConnection /*&& connects*/){
+				Debug.Log("Placing "+current_obj.name + " on "+ hit.collider.name);
 				current_obj.transform.position = hit.point;
 				CorrectItemRotation(current_obj.transform, -hit.normal);
 
@@ -81,9 +82,10 @@ public class ConstructionMain : MonoBehaviour {
 		}
 		else {
 			if (Input.GetMouseButtonDown(0)){
-			
+				Debug.Log("PickingUp");
 				RaycastHit hit = new RaycastHit();
 				if (ProbeUranus(out hit)){
+					Debug.Log(hit.collider.name);
 					PickUpPart(hit.transform.gameObject);
 				}
 			}
@@ -127,6 +129,7 @@ public class ConstructionMain : MonoBehaviour {
 		Gondola gnd = current_obj.GetComponent<Gondola>();
 		Balloon bal = current_obj.GetComponent<Balloon>();
 		current_item = current_obj.GetComponent<ConstrItem>();
+		Debug.Log(current_obj);
 		current_item.EnableFadeMode();
 		if (current_item.colliders.Length >0){
 			foreach (Collider x in current_item.colliders){
@@ -214,14 +217,20 @@ public class ConstructionMain : MonoBehaviour {
 	bool ProbeUranus(out RaycastHit hit){
 		hit = new RaycastHit();
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		int mask = 1 << 10;
+		int mask = 1 << 9;
 
 		if (Physics.Raycast(ray, out hit, mask)){
+			Debug.Log("Pysh! "+ hit.collider.name);
+			if (hit.collider.gameObject.name == "Canvas"){
+				hit_obj = null;
+				
+				return false;
+			}
+			else {
+				hit_obj = hit.transform.gameObject;
 
-
-			hit_obj = hit.transform.gameObject;
-
-			return true;
+				return true;
+			}
 		}
 		else {
 			hit_obj = null;

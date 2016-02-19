@@ -9,6 +9,16 @@ public class LevelInitiator : MonoBehaviour {
 	public string[] lines;
 	public GameObject[] hierarchy;
 
+	int[] indices;
+	Balloon[] balloons;
+	Ballast[] ballasts;
+	Engine[] engines;
+	FuelContainer[] gas_cont;
+	FuelContainer[] hydro_cont;
+	FuelContainer[] water_cont;
+
+	InputManager inp;
+
 	// Use this for initialization
 	void Start () {
 		GameObject crutch = GameObject.Find("Savecrutch");
@@ -17,8 +27,13 @@ public class LevelInitiator : MonoBehaviour {
 		}
 		//lines = save_file.text.Split('\n');
 		lines = savetext.Split('\n');
+
+		indices = new int[6];
+		inp = GameObject.Find("GameController").GetComponent<InputManager>();
+
 		CreateBuild();
 		//save_file = Resources.Load("Saves/testsave.txt") as TextAsset;
+
 
 	}
 
@@ -32,7 +47,42 @@ public class LevelInitiator : MonoBehaviour {
 			Quaternion rot = Quaternion.Euler(ReadVector(substrings[3]));
 			Debug.Log(i+ ") adds to place " + place);
 			hierarchy[place] = (GameObject) Instantiate(temp_obj, pos, rot);
+
+			Balloon tmp_ball = hierarchy[place].GetComponent<Balloon>();
+			Ballast tmp_last = hierarchy[place].GetComponent<Ballast>();
+			Engine  tmp_engn = hierarchy[place].GetComponent<Engine>();
+			FuelContainer tmp_fuel = hierarchy[place].GetComponent<FuelContainer>();
+
+			if (tmp_ball != null){
+				indices[0]++;
+			}
+			else if (tmp_last != null){
+				indices[1]++;
+			}
+			else if (tmp_engn != null){
+				indices[2]++;
+			}
+			else if (tmp_fuel != null){
+				switch (tmp_fuel.resType){
+				case FuelContainer.ResType.Gasoline: indices[3]++; break;
+				case FuelContainer.ResType.Hydrogen: indices[4]++; break;
+				case FuelContainer.ResType.Water: indices[5]++; break;
+				}
+			}
 		}
+		balloons = new Balloon[indices[0]];
+		ballasts = new Ballast[indices[1]];
+		engines = new Engine[indices[2]];
+		gas_cont = new FuelContainer[indices[3]];
+		hydro_cont = new FuelContainer[indices[4]];
+		water_cont = new FuelContainer[indices[5]];
+		for (int i = 0; i < indices.Length; i++) {
+			
+		
+			indices[i] = 0;
+		}
+
+
 		//establish Connections
 		for (int i = 0; i < lines.Length-1; i++) {
 			string[] substrings = lines[i].Split('|');
@@ -57,8 +107,39 @@ public class LevelInitiator : MonoBehaviour {
 
 				}
 			}
+			Balloon tmp_ball = hierarchy[place].GetComponent<Balloon>();
+			Ballast tmp_last = hierarchy[place].GetComponent<Ballast>();
+			Engine  tmp_engn = hierarchy[place].GetComponent<Engine>();
+			FuelContainer tmp_fuel = hierarchy[place].GetComponent<FuelContainer>();
+
+			if (tmp_ball != null){
+				balloons[indices[0]] = tmp_ball;
+				indices[0]++;
+			}
+			else if (tmp_last != null){
+				indices[1]++;
+			}
+			else if (tmp_engn != null){
+				engines[indices[2]] = tmp_engn;
+				indices[2]++;
+			}
+			else if (tmp_fuel != null){
+				switch (tmp_fuel.resType){
+				case FuelContainer.ResType.Gasoline: gas_cont[indices[3]] = tmp_fuel; indices[3]++; break;
+				case FuelContainer.ResType.Hydrogen: hydro_cont[indices[4]] = tmp_fuel; indices[4]++; break;
+				case FuelContainer.ResType.Water: water_cont[indices[5]] = tmp_fuel; indices[5]++; break;
+				}
+			}
+
 
 		}
+
+		inp.balloons = balloons;
+		inp.last = ballasts;
+		inp.engines = engines;
+		inp.gas_cont = gas_cont;
+		inp.hydro_cont = hydro_cont;
+		inp.water_cont = water_cont;
 	}
 
 	int FindEntry(string id){

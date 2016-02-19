@@ -4,9 +4,9 @@ using System.Collections;
 public class Ballast : MonoBehaviour {
 
 
-	public FixedJoint[] sandbags;
+	//public FixedJoint[] sandbags;
 	//public ConfigurableJoint[] sandbags;
-	public int cur_bag;
+
 	// Use this for initialization
 	void Start (){
 
@@ -14,12 +14,12 @@ public class Ballast : MonoBehaviour {
 	
 	// Update is called once per frame
 	public void Drop(){
-		if (cur_bag < sandbags.Length){
-			Rigidbody rb = sandbags[sandbags.Length-1-cur_bag].GetComponent<Rigidbody>();
+		//if (cur_bag < sandbags.Length){
+			Rigidbody rb = GetComponent<Rigidbody>();
 			Debug.Log(rb);
-			Destroy(sandbags[sandbags.Length-1-cur_bag]);
+			Destroy(GetComponent<FixedJoint>());
 			rb.AddForce(-rb.transform.forward*10, ForceMode.Impulse);
-			cur_bag++;
-		}
+			//cur_bag++;
+		//}
 	}
 }

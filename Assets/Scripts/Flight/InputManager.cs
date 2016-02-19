@@ -2,13 +2,18 @@
 using System.Collections;
 
 public class InputManager : MonoBehaviour {
-	public Ballast last;
+
 	//public ForcesManager forc;
 	CameraController cam;
-	public Balloon balloon;
-	public Engine eng;
+	public Balloon[] balloons;
+	public Ballast[] last;
+	public Engine[] engines;
+	public FuelContainer[] gas_cont;
+	public FuelContainer[] hydro_cont;
+	public FuelContainer[] water_cont;
 	public bool const_mode;
 	ConstructionMain constr;
+	int ballast_index;
 	// Use this for initialization
 	void Start () {
 		if (cam == null){
@@ -20,13 +25,13 @@ public class InputManager : MonoBehaviour {
 		if (constr != null){
 			const_mode = true;
 		}
-		if (balloon == null){
+		/* if (balloons.Length == null){
 			GameObject ball_obj = GameObject.Find("Balloon");
 			if(ball_obj != null){
 				balloon = ball_obj.GetComponent<Balloon>();
 			}
 
-		}
+		} */
 	}
 	
 	// Update is called once per frame
@@ -49,55 +54,65 @@ public class InputManager : MonoBehaviour {
 			cam.distance -= Input.GetAxis("Mouse ScrollWheel");
 		}
 
-			if (!const_mode){
+		//if (!const_mode){
+		if (balloons.Length > 0){
 			//Gas Pressure Control
 			if (Input.GetKey(KeyCode.X)){
-				balloon.gas_vol -= Time.deltaTime*30;
-				if (balloon.gas_vol < 0f){
-					balloon.gas_vol = 0f;
+				foreach(Balloon x in balloons){
+					x.gas_vol -= Time.deltaTime*30;
+					if (x.gas_vol < 0f){
+						x.gas_vol = 0f;
+					}
 				}
 			}
 			if (Input.GetKey(KeyCode.C)){
-				balloon.gas_vol += Time.deltaTime*30;
-				if (balloon.gas_vol > balloon.max_vol){
-					balloon.gas_vol = balloon.max_vol;
+				foreach(Balloon x in balloons){
+					x.gas_vol += Time.deltaTime*30;
+					if (x.gas_vol > x.max_vol){
+						x.gas_vol = x.max_vol;
+					}
 				}
 			}
-			//Ballast
-			if (Input.GetKeyDown(KeyCode.Space)){
-				last.Drop();
+		}
+		//Ballast
+		if (Input.GetKeyDown(KeyCode.Space)){
+			if (ballast_index < last.Length){
+				last[ballast_index].Drop();
+				ballast_index ++;
 			}
-
-			//RPM Control
+			else{
+				ChoseContainer(2, Time.deltaTime * 5);
+			}
+		}
+		if (engines.Length > 0){
+		//RPM Control
 			if (Input.GetKeyDown(KeyCode.LeftShift)){
-
-				/*Debug.Log("Shift");
-				foreach(Engine x in forc.engines){
+				foreach(Engine x in engines){
 					x.GearUp();
-				}*/
-				eng.GearUp();
+				}
 			}
 			
 			if (Input.GetKeyDown(KeyCode.LeftControl)){
-				/*foreach(Engine x in forc.engines){
+				foreach(Engine x in engines){
 					x.GearDown();
-				}*/
-				eng.GearDown();
+				}
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha1)){
-				//forc.engines[0].GearUp();
-				eng.GearUp();
+
+				engines[0].GearUp();
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha2)){
 				//forc.engines[1].GearUp();
-				eng.GearDown();
+				engines[0].GearDown();
 			}
+		}
+			
 			//Burner pshhh
 			if (Input.GetKeyDown(KeyCode.B)){
 
 			} 
-		}
-		else {
+		//}
+		if (const_mode){
 			if (Input.GetKeyDown(KeyCode.A)){
 				constr.rot_offset += Vector3.forward * 90;
 			}
@@ -126,5 +141,25 @@ public class InputManager : MonoBehaviour {
 			input = 360 + input;
 		}
 		return input;
+	}
+
+	void ChoseContainer(int id, float amount){
+		FuelContainer[] containers = new FuelContainer[0];
+		switch (id){
+		case 0: containers = gas_cont; break;
+		case 1: containers = hydro_cont; break;
+		case 2: containers = water_cont; break;
+		}
+		if (containers.Length > 0){
+			for (int i = 0; i < containers.Length; i++) {
+				if (containers[i].volume >0){
+					containers[i].SpendFuel(amount);
+					break;
+				}
+				else if (i == containers.Length-1 && containers[i].volume <= 0){
+					Debug.LogWarning("DasWas " +id);
+				}
+			}
+		}
 	}
 }

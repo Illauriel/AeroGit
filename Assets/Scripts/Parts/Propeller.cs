@@ -10,8 +10,13 @@ public class Propeller : Thruster {
 	//public AerialPhysics phys;
 	public float rpm;
 	public GameObject[] normal;
-	public GameObject[] blurry;
+	//public GameObject[] blurry;
 	public GameObject[] broken;
+	public GameObject discus;
+	//bool disc;
+	public AudioSource audioSource;
+
+
 
 	public Rigidbody myBody;
 	float velocity;
@@ -20,11 +25,23 @@ public class Propeller : Thruster {
 		//myRenderer = gameObject.GetComponent<Renderer>();
 		if (gameObject.GetComponentInParent<Rigidbody>() != null){
 			myBody = gameObject.GetComponentInParent<Rigidbody>();
+
+		}
+		if (audioSource == null){
+			audioSource = GetComponent<AudioSource> ();
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		audioSource.pitch = 0f;
+		if (rpm < 500) {
+			audioSource.pitch = rpm / 500;
+		} 
+		else {
+			audioSource.pitch = 1 + (rpm - 500) / 2500;
+		}
+
 		if (engine != null){
 			rpm = engine.rpm;
 			velocity = myBody.velocity.z;
@@ -45,23 +62,33 @@ public class Propeller : Thruster {
 			thrust = (4.3924e-8f * rpm * Mathf.Pow(in_diameter, 3.5f))/Mathf.Sqrt(in_pitch)*(4.23333e-4f * rpm * in_pitch - velocity); 
 
 		}
-		if (rpm > 350 && blurry[0].activeSelf == false){
+		if (rpm > 350 && discus.activeSelf == false){
 			for (int i = 0; i < normal.Length; i++) {
 				if ( !broken[i].activeSelf ){
 					normal[i].SetActive(false);
-					blurry[i].SetActive(true);
+					if (discus == null){
+						discus.SetActive(true);
+					}
+					else{
+						discus.SetActive(true);
+					}
 				}
 			}
 			//blurry.enabled = true;
 		//	myRenderer.enabled = false;
 		}
-		else if (rpm <= 350 && blurry[0].activeSelf == true){
+		else if (rpm <= 350 && discus.activeSelf == true){
 			//blurry.enabled = false;
 			//myRenderer.enabled = true;
 			for (int i = 0; i < normal.Length; i++) {
 				if ( !broken[i].activeSelf ){
 					normal[i].SetActive(true);
-					blurry[i].SetActive(false);
+					if (discus == null){
+						discus.SetActive(false);
+					}
+					else{
+						discus.SetActive(false);
+					}
 				}
 			}
 		}

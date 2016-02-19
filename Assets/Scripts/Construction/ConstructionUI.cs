@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -70,6 +70,9 @@ public class ConstructionUI : MonoBehaviour {
 			cur_items[i].transform.parent = items[i].transform;
 			cur_items[i].transform.localPosition = Vector3.zero;
 			ConstrItem this_item = cur_items[i].gameObject.GetComponent<ConstrItem>();
+			if (this_item.renderers.Length == 0){
+				Debug.LogWarning("Warning the item "+this_item.spawnedItem + " has no renderers");
+			}
 			Renderer renderer = this_item.renderers[0];
 			Bounds bounds = renderer.bounds;
 			float xtent = Mathf.Max(new float[]{bounds.extents.x,bounds.extents.y, bounds.extents.z});
@@ -79,8 +82,12 @@ public class ConstructionUI : MonoBehaviour {
 			cur_items[i].transform.rotation = transform.rotation;
 			cur_items[i].transform.localScale = Vector3.one * 2.5f / xtent;
 			cur_items[i].layer = 0;
+			for (int j = 0; j < this_item.colliders.Length; j++) {
+				Destroy(this_item.colliders[j]);
+			}
 			Destroy(this_item);
-			Destroy(cur_items[i].gameObject.GetComponentInChildren<Collider>());
+
+			//Destroy(cur_items[i].gameObject.GetComponentInChildren<Collider>());
 			Destroy(cur_items[i].gameObject.GetComponent<ConstRope>());
 		}
 	}
