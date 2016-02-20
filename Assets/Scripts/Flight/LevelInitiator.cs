@@ -152,7 +152,7 @@ public class LevelInitiator : MonoBehaviour {
 				props[indices[6]] = tmp_prop;
 				Destroy(GetComponent<FixedJoint>());
 				//Destroy(GetComponent<Rigidbody>());
-				GetComponent<Rigidbody>().isKinematic = true;
+				//GetComponent<Rigidbody>().isKinematic = true;
 
 
 				indices[6]++;
@@ -170,7 +170,9 @@ public class LevelInitiator : MonoBehaviour {
 		foreach (Propeller x in props){
 			if (engines.Length > 0){
 				x.engine = engines[0];
-				x.transform.parent = engines[0].transform;
+				//x.transform.parent = engines[0].transform;
+				HingeJoint hj = x.gameObject.AddComponent<HingeJoint>();
+				hj.axis = Vector3.up;
 			}
 			else{
 				x.transform.parent = hierarchy[0].transform;

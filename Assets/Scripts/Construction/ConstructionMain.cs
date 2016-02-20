@@ -189,7 +189,7 @@ public class ConstructionMain : MonoBehaviour {
 		}
 
 
-
+		rot_offset = Vector3.zero;
 	}
 
 
@@ -204,6 +204,7 @@ public class ConstructionMain : MonoBehaviour {
 
 	void DestroyPart(){
 		Destroy(current_obj);
+		item_no--;
 	}
 
 	void ConnectPart(GameObject part){

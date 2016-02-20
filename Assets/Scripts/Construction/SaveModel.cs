@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using System.Collections;
 using System.IO;
 
@@ -63,7 +63,7 @@ public class SaveModel : MonoBehaviour {
 
 		File.WriteAllText(savepath+"/"+filename+".txt", save_text);
 		Debug.Log("Savegame "+filename + " saved!");
-		AssetDatabase.ImportAsset(savepath+"/"+filename+".txt");
+		//AssetDatabase.ImportAsset(savepath+"/"+filename+".txt");
 		GameObject.Find("Savecrutch").GetComponent<Savecrutch>().savetext = save_text;
 	}
 
